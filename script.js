@@ -304,7 +304,8 @@ function drawCharts(games) {
             scales: {
                 x: { 
                     title: { display: true, text: '折扣價格(NT$)' },
-                    type: 'linear'
+                    type: 'linear',
+                    max: 600
                 },
                 y: { 
                     title: { display: true, text: '好評率(%)' },
@@ -366,7 +367,7 @@ function drawCharts(games) {
                 legend: { display: false }
             },
             scales: {
-                x: { title: { display: true, text: '折扣價格(NT$)' }, type: 'linear' },
+                x: { title: { display: true, text: '折扣價格(NT$)' }, type: 'linear', max: 600 },
                 y: { title: { display: true, text: '評論數' }, type: 'linear', beginAtZero: true, max: 200000 }
             }
         }
