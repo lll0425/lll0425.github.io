@@ -240,17 +240,18 @@ document.addEventListener('DOMContentLoaded', function() {
 // --- 圖表與排行榜 ---
 function drawCharts(games) {
     // 1. 散點圖：折扣價格 vs. 好評率 (點的大小表示評論數)
-    const pricePositiveRateData = [];
+    // Modify this chart to be Review Count vs. Discount Percentage
+    const barChartData = [];
     games.forEach(game => {
         // 價格轉數字
         let price = 0;
         if (game.價格 && typeof game.價格 === 'string') {
             price = parseFloat(game.價格.replace('NT$', '').replace(/,/g, ''));
         }
-        // 好評率轉數字
-        let positiveRate = 0;
-        if (game.好評百分比 && typeof game.好評百分比 === 'string') {
-            positiveRate = parseFloat(game.好評百分比.replace('%', ''));
+        // 原價轉數字
+        let originalPrice = 0;
+        if (game.原價 && typeof game.原價 === 'string') {
+            originalPrice = parseFloat(game.原價.replace('NT$', '').replace(/,/g, ''));
         }
         // 評論數轉數字
         let reviewCount = 0;
@@ -258,34 +259,34 @@ function drawCharts(games) {
             reviewCount = parseInt(game.評論數.replace(/,/g, ''));
         }
 
-        // 只包含價格和好評率都大於 0 的遊戲
-        if (price > 0 && positiveRate > 0) {
-            // 計算點的半徑，使用log縮放評論數
-            let reviewCountNum = parseInt(game.評論數.replace(/,/g, '')); // 確保評論數是數字
-            if (isNaN(reviewCountNum)) reviewCountNum = 0;
-            const pointSize = reviewCountNum > 0 ? Math.max(3, Math.log(reviewCountNum + 1) * 2) : 3; // 最小點半徑為3
-            console.log(`Game: ${game.名稱}, Reviews: ${reviewCountNum}, Point Size: ${pointSize}`); // 添加log輸出
-            pricePositiveRateData.push({
-                x: price, // X軸是折扣價格
-                y: positiveRate, // Y軸是好評率
+        // 計算折扣比例 (只在原價和價格都大於 0 且原價大於價格時計算)
+        let discountPercentage = 0;
+        if (originalPrice > 0 && price > 0 && originalPrice > price) {
+            discountPercentage = ((originalPrice - price) / originalPrice) * 100;
+        }
+
+        // 只包含有評論數且有有效折扣的遊戲 (或至少有價格原價數據)
+        if (reviewCount > 0 && (originalPrice > 0 || price > 0)) {
+            barChartData.push({
+                x: discountPercentage, // X軸是折扣比例
+                y: reviewCount, // Y軸是評論數
                 label: game.名稱, // Tooltip 顯示遊戲名稱
-                reviewCount: game.評論數, // 用於tooltip顯示
-                r: pointSize // 設定點的半徑
+                positiveRate: game.好評百分比 // 用於tooltip顯示
             });
         }
     });
 
     if(window.barChartObj) window.barChartObj.destroy();
-    const scatter1Ctx = document.getElementById('barChart').getContext('2d');
-    window.barChartObj = new Chart(scatter1Ctx, {
+    const barChartCtx = document.getElementById('barChart').getContext('2d'); // Target barChart
+    window.barChartObj = new Chart(barChartCtx, {
         type: 'scatter',
         data: {
             datasets: [{
-                label: '遊戲折扣價格 vs. 好評率 (點的大小表示評論數)',
-                data: pricePositiveRateData,
+                label: '遊戲評論數 vs. 折扣比例', // 修改圖表標題
+                data: barChartData,
                 backgroundColor: 'rgba(13,110,253,0.5)',
                 borderColor: '#0d6efd',
-                // pointRadius: 3, // 這裡不再使用固定的 pointRadius
+                pointRadius: 3,
             }]
         },
         options: {
@@ -295,7 +296,8 @@ function drawCharts(games) {
                     callbacks: {
                         label: function(context) {
                             const d = context.raw;
-                            return `${d.label}\n價格: NT$${d.x}\n好評率: ${d.y}%\n評論數: ${d.reviewCount}`;
+                            // 修改 tooltip 顯示
+                            return `${d.label}\n評論數: ${d.y.toLocaleString()}\n折扣比例: ${d.x.toFixed(2)}%\n好評率: ${d.positiveRate}`;
                         }
                     }
                 },
@@ -303,21 +305,23 @@ function drawCharts(games) {
             },
             scales: {
                 x: { 
-                    title: { display: true, text: '折扣價格(NT$)' },
-                    type: 'linear',
-                    max: 600
-                },
-                y: { 
-                    title: { display: true, text: '好評率(%)' },
+                    title: { display: true, text: '折扣比例(%)' }, // 修改X軸標籤
                     type: 'linear',
                     beginAtZero: true,
-                    max: 100
+                    max: 100 // 折扣比例最大100%
+                },
+                y: { 
+                    title: { display: true, text: '評論數' }, // Y軸標籤
+                    type: 'linear',
+                    beginAtZero: true,
+                    max: 200000 // 設定Y軸最大值為200000
                 }
             }
         }
     });
 
     // 2. 散點圖：折扣價格 vs. 評論數
+    // Revert this chart back to its original state
     const priceReviewScatterData = [];
     games.forEach(game => {
         // 價格轉數字
@@ -342,8 +346,8 @@ function drawCharts(games) {
     });
 
     if(window.scatterChartObj) window.scatterChartObj.destroy();
-    const scatter2Ctx = document.getElementById('scatterChart').getContext('2d');
-    window.scatterChartObj = new Chart(scatter2Ctx, {
+    const scatterChartCtx = document.getElementById('scatterChart').getContext('2d'); // Target scatterChart
+    window.scatterChartObj = new Chart(scatterChartCtx, {
         type: 'scatter',
         data: {
             datasets: [{
