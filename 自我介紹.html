@@ -144,6 +144,23 @@
             align-items: center;
         }
 
+        .nav-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-left a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+            margin-right: 2rem;
+        }
+
+        .nav-left a:hover {
+            color: #007bff;
+        }
+
         .nav-links {
             display: flex;
             gap: 2rem;
@@ -472,19 +489,19 @@
     <!-- 圖片輪播 -->
     <div class="slider-container">
         <div class="slider">
-            <div class="slide active" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('image/IMG_2022.JPG')">
+            <div class="slide active" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('IMG_2022.JPG')">
                 <div class="slide-content">
                     <h2>智能製造工作坊</h2>
                     <p>台積電2025計畫參與者</p>
                 </div>
             </div>
-            <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('image/B619F20E-D066-441A-BC78-6C820447EF30.jpg')">
+            <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('B619F20E-D066-441A-BC78-6C820447EF30.JPG')">
                 <div class="slide-content">
                     <h2>高中畢業旅行</h2>
                     <p>與同學們的美好回憶</p>
                 </div>
             </div>
-            <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('image/S__10641493.jpg')">
+            <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('S__10641493.JPG')">
                 <div class="slide-content">
                     <h2>大學畢業旅行</h2>
                     <p>澎湖之旅的珍貴時光</p>
@@ -503,11 +520,15 @@
     <!-- 導航欄 -->
     <nav class="navbar">
         <div class="nav-container">
+            <div class="nav-left">
+                <a href="../frontend/index.html" id="report-link">期末報告頁面</a>
+            </div>
             <div class="nav-links">
                 <a href="#about">關於我</a>
                 <a href="#experience">工作經驗</a>
                 <a href="#special">特別經歷</a>
                 <a href="#skills">技能</a>
+                <a href="https://lll0425.github.io/期末報告/index.html">期末報告</a>
                 <a href="#portfolio">作品集</a>
                 <a href="#contact">聯繫我</a>
             </div>
@@ -524,7 +545,7 @@
                 <p style="margin-top: 1rem">目前專注於機器學習與資訊安全領域的研究，期待能在這兩個快速發展的領域中有所突破。我熱衷於技術交流與知識分享，歡迎與我討論相關議題。</p>
             </div>
             <div class="about-image">
-                <img src="image/IMG_1768.JPG" alt="個人照片">
+                <img src="IMG_1768.JPG" alt="個人照片">
             </div>
         </div>
     </section>
