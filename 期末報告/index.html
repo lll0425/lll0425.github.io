@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steam 遊戲cp值分析</title>
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-eval'; style-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com 'unsafe-inline'; img-src 'self' https://shared.fastly.steamstatic.com data: blob:; connect-src 'self'; font-src 'self' https://cdnjs.cloudflare.com;">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="style.css" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+</head>
+<body class="bg-light">
+    <!-- 導航欄 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fab fa-steam me-2"></i>steam 遊戲cp值分析
+            </a>
+        </div>
+    </nav>
+
+    <!-- 主要內容 -->
+    <div class="container my-5">
+        <!-- 圖表區塊 -->
+        <div class="row mb-4">
+            <div class="col-12 col-lg-6 mb-4">
+                <div class="card p-3">
+                    <h6 class="mb-3">評論數 vs. 折扣價格</h6>
+                    <canvas id="scatterChart"></canvas>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 mb-4">
+                <div class="card p-3">
+                    <h6 class="mb-3">評論數 vs 折扣比例</h6>
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+            <div class="col-12 mb-4">
+                <div class="card p-3">
+                    <h6 class="mb-3">CP值排行榜 (CP值 = 好評率 × log(評論數+1) ÷ 折扣價格)</h6>
+                    <div id="cpRank"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 價格和折扣篩選區域 -->
+        <div class="filter-container">
+            <!-- 好評率摘要選擇欄 -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="reviewFilter" class="form-label">篩選好評率摘要：</label>
+                    <select id="reviewFilter" class="form-select">
+                        <option value="全部">全部</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="priceFilter" class="form-label">價格範圍：</label>
+                    <select id="priceFilter" class="form-select">
+                        <option value="全部">全部</option>
+                        <option value="0-100">NT$ 0-100</option>
+                        <option value="100-300">NT$ 100-300</option>
+                        <option value="300-500">NT$ 300-500</option>
+                        <option value="500-1000">NT$ 500-1000</option>
+                        <option value="1000+">NT$ 1000以上</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="discountFilter" class="form-label">折扣範圍：</label>
+                    <select id="discountFilter" class="form-select">
+                        <option value="全部">全部</option>
+                        <option value="0-20">0-20%</option>
+                        <option value="20-40">20-40%</option>
+                        <option value="40-60">40-60%</option>
+                        <option value="60-80">60-80%</option>
+                        <option value="80+">80%以上</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <!-- 遊戲列表（橫向排版） -->
+        <div id="gameTable"></div>
+    </div>
+
+    <!-- 載入動畫 -->
+    <div id="loading" class="loading-overlay d-none">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+</body>
+</html> 
